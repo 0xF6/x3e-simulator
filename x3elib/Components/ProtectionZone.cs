@@ -1,4 +1,4 @@
-﻿namespace EtherReactorSimulator.Components
+﻿namespace x3e.components
 {
     public class ProtectionZone<TZone> where TZone : Zone
     {

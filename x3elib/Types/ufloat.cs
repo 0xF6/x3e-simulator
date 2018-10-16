@@ -1,4 +1,4 @@
-﻿namespace EtherReactorSimulator.Types
+﻿namespace x3e.types
 {
     using System;
     using System.Globalization;

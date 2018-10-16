@@ -1,5 +1,5 @@
 ﻿// ReSharper disable PossibleNullReferenceException
-namespace EtherReactorSimulator
+namespace x3e
 {
     using System;
 
@@ -11,34 +11,19 @@ namespace EtherReactorSimulator
 
         public static IReactiveResult Then<E>(this IReactiveResult result, E value)
         {
-            if (result is ReactiveResult v && v._b)
+            if (result is ReactiveResult v && v)
                 return new ReactiveResult(true, value);
             return result;
         }
 
         public static IReactiveResult Else<E>(this IReactiveResult result, E value)
         {
-            if (result is ReactiveResult v && !v._b)
+            if (result is ReactiveResult v && !v)
                 return new ReactiveResult(false, value);
             return new ReactiveResult(false, (result as ReactiveResult)._value);
         }
+
+        public static float Fixed(this float value, int round) => (float) Math.Round(value, round);
         public static W Value<W>(this IReactiveResult result) => (W)Convert.ChangeType((result as ReactiveResult)._value, typeof(W));
-    }
-
-    public interface IReactiveResult
-    {
-        
-    }
-
-    public class ReactiveResult : IReactiveResult
-    {
-        internal readonly bool _b;
-        internal readonly object _value;
-
-        internal ReactiveResult(bool b, object value)
-        {
-            _b = b;
-            _value = value;
-        }
     }
 }

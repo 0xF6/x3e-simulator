@@ -1,4 +1,4 @@
-﻿namespace EtherReactorSimulator.Components
+﻿namespace x3e.components
 {
     using System.Numerics;
 

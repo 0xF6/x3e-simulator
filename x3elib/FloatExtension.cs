@@ -1,4 +1,4 @@
-﻿namespace EtherReactorSimulator
+﻿namespace x3e
 {
     public static class FloatExtension
     {
