@@ -1,4 +1,4 @@
-﻿namespace x3e
+﻿namespace x3e.etc
 {
     public static class FloatExtension
     {

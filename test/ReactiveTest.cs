@@ -1,6 +1,6 @@
 ﻿namespace ERSTest
 {
-    using EtherReactorSimulator;
+    using x3e;
     using Xunit;
 
     public class ReactiveTest

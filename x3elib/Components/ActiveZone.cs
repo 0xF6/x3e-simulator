@@ -3,6 +3,7 @@
     using System;
     using System.Drawing;
     using System.Threading;
+    using etc;
     using RC.Framework.Screens;
     
     public class ActiveZone<TRod> : Zone where TRod : EmptyRod, new()
@@ -13,10 +14,7 @@
         public DateTime WarmStartTime { get; set; }
         public ProtectionZone<ActiveZone<TRod>> Protector { get; }
 
-        public ActiveZone()
-        {
-            Protector = new ProtectionZone<ActiveZone<TRod>>(this);
-        }
+        public ActiveZone() => Protector = new ProtectionZone<ActiveZone<TRod>>(this);
 
         public void WarmUp()
         {
@@ -50,7 +48,7 @@
                 Rod.MinTemperature = Rod.Temperature;
             Status = ActiveZoneStatus.Work;
         }
-        public override void Extract(bool emergency = false)
+        public override void Extract(bool emergency = false, bool auto = true)
         {
             if (Rod.MaxTemperature < Rod.Temperature) Rod.MaxTemperature = Rod.Temperature;
             if (emergency)
@@ -61,11 +59,16 @@
                 Console.WriteLine(Status);
                 return;
             }
-            Screen.WriteLine($"[{"E".To(Color.Yellow)}] Extracted rod in [ZoneID: {UID.To(Color.Gold)}], last active volume: {Rod.Volume}");
-            Screen.WriteLine($"[{"E".To(Color.Yellow)}] Total generated energy in current rod: {Rod.ExtractedPower} e/s in [ZoneID: {UID.To(Color.Gold)}]");
-            Screen.WriteLine($"[{"E".To(Color.Yellow)}] Max {Rod.MaxTemperature}°C Min {Rod.MinTemperature}°C");
+
+            if (auto)
+            {
+                Screen.WriteLine($"[{"E".To(Color.Yellow)}] Extracted rod in [ZoneID: {UID.To(Color.Gold)}], last active volume: {Rod.Volume}");
+                Screen.WriteLine($"[{"E".To(Color.Yellow)}] Total generated energy in current rod: {Rod.ExtractedPower} e/s in [ZoneID: {UID.To(Color.Gold)}]");
+                Screen.WriteLine($"[{"E".To(Color.Yellow)}] Max {Rod.MaxTemperature}°C Min {Rod.MinTemperature}°C");
+            }
             Status = ActiveZoneStatus.Extracted;
-            ReactivatedRod();
+            if(auto)
+                ReactivatedRod();
         }
         public override void NextReaction()
         {
@@ -90,7 +93,7 @@
            (float)(Math.Pow(power, 2) * Math.Atan(Math.Pow(power, 3)) *
             Math.Cos(Math.Pow(Math.Pow(power, 4), 2)));
         /// <summary>
-        /// x^2 arctan(x^3) + log(x^1.4)
+        /// x^2 arctan(x^3) + log(x^power)
         /// </summary>
         public float CalculateVolume(DateTime time, float Power)
         {
@@ -98,7 +101,8 @@
             return (float) Math.Abs(Math.Pow(x, 2) * Math.Atan(Math.Pow(x, 3)) + Math.Log(Math.Pow(x, Power)));
         }
         /// <summary>
-        /// (x/p)^2 arctan(x)
+        /// (x/power)^2 arctan(x) - energy
+        /// log(x) - degradation
         /// </summary>
         public float DegradationVolume(float volume, float power, out float generatedEnergy)
         {

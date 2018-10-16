@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28010.2036
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "x3e", "x3elib\x3elib.csproj", "{3B74FBA8-DD9C-4724-8A11-C67FCF6771AF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "x3elib", "x3elib\x3elib.csproj", "{3B74FBA8-DD9C-4724-8A11-C67FCF6771AF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "test", "test\x3e.test.csproj", "{4A209301-0F3E-4438-B457-1CA666D4A495}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "x3e.test", "test\x3e.test.csproj", "{4A209301-0F3E-4438-B457-1CA666D4A495}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Simulator", "simulator\Simulator.csproj", "{C6306220-5B6E-4CDD-AC53-352F593782EE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Simulator", "simulator\Simulator.csproj", "{C6306220-5B6E-4CDD-AC53-352F593782EE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

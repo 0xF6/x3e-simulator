@@ -1,7 +1,7 @@
 namespace ERSTest
 {
     using System.Threading;
-    using EtherReactorSimulator.Components;
+    using x3e.components;
     using Xunit;
 
     public class RodTesting
