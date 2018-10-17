@@ -1,23 +1,21 @@
 ﻿namespace x3e.components
 {
-    public class ProtectionZone<TZone> where TZone : Zone
+    using simulation;
+    public class ProtectionZone<Rod> : SimulatorObject where Rod : EmptyRod, new()
     {
-        private readonly TZone _zone;
-
-        public ProtectionZone(TZone zone) => _zone = zone;
-
-        public void Protection<Rod>(Rod rod) where Rod : EmptyRod
+        public ProtectionZone() : base()
         {
-            if (rod.Volume > 400f)
-            {
-                _zone.Extract(true);
-                return;
-            }
-            if (rod.Temperature <= -2200)
-            {
-                _zone.Extract(true);
-                return;
-            }
+            AddComponent<TemperatureSensor<Rod>>();
+            AddComponent<VolumeSensor<Rod>>();
         }
+        public override void Update()
+        {
+            if(GetComponent<ActiveZone<Rod>>().Status != ActiveZoneStatus.Work)
+                return;
+            GetComponent<TemperatureSensor<Rod>>().Signal();
+            GetComponent<VolumeSensor<Rod>>().Signal();
+        }
+
+        public void Extract(bool emergency = false, ActiveZoneStatus? status = null) => GetComponent<ActiveZone<Rod>>().Extract(emergency, true, status);
     }
 }

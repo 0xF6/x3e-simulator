@@ -8,8 +8,6 @@
     {
         public new string UID { get; } = Guid.NewGuid().ToString().Split('-').First();
         public abstract void NextReaction();
-        public abstract void Extract(bool emergency = false, bool auto = true);
-
         public override void Update() => NextReaction();
     }
 }

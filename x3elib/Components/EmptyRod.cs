@@ -1,5 +1,6 @@
 ﻿namespace x3e.components
 {
+    using System;
     using simulation;
     public abstract class EmptyRod : SimulatorObject
     {
@@ -7,6 +8,13 @@
         public abstract float MaxVolume { get; }
         public abstract float Power { get; set; }
         public float Load { get; set; }
+
+        internal void ReadTemperature()
+        {
+            if (Temperature < MinTemperature) MinTemperature = Temperature;
+            if (Temperature > MaxTemperature) MaxTemperature = Temperature;
+        }
+
         public float ExtractedPower { get; set; }
         public float Temperature { get; set; } = 21.4f;
 

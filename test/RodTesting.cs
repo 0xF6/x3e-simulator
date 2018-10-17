@@ -14,10 +14,6 @@ namespace ERSTest
             var activeZone3 = new ActiveZone<EtherRod>();
             var activeZone4 = new ActiveZone<EtherRod>();
             
-            activeZone1.WarmUp();
-            activeZone2.WarmUp();
-            activeZone3.WarmUp();
-            activeZone4.WarmUp();
             while (true)
             {
                 activeZone1.NextReaction();

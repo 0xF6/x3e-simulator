@@ -12,14 +12,13 @@ namespace Simulator
         static void Main(string[] args)
         {
 
-            var sim = Simulator<EtherRod>.Setup<EtherRod>(2);
+            var sim = Simulator<EtherRod>.Setup<EtherRod>(12);
+            
 
-            sim.WarmUpZone();
-
-            sim.Simulate();
+            new Thread(sim.Simulate).Start();
             Thread.Sleep(2000);
             Console.ReadKey();
-            sim.ShutdownReaction();
+            sim.IsStop = true;
             Console.ReadKey();
         }
     }

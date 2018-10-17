@@ -2,15 +2,16 @@
 {
     using System;
     using System.Collections.Generic;
-
+    using System.Linq;
+    using DictionaryComponent = System.Collections.Generic.Dictionary<System.Type, SimulatorObject>;
     public abstract class SimulatorObject : IDisposable
     {
         public virtual Guid UID { get; } = Guid.NewGuid();
 
-
+        protected SimulatorObject() => SimulationStorage.Register(this);
 
         public virtual void Start() { }
-        public abstract void Update();
+        public virtual void Update() { }
         public virtual void Stop() { }
         public virtual void Clear() { }
 
@@ -40,6 +41,8 @@
 
         public void Dispose() => Clear();
 
-        private Dictionary<Type, object> childrens { get; } = new Dictionary<Type, object>();
+        private DictionaryComponent childrens { get; } = new DictionaryComponent();
+        public DictionaryComponent getChildrens() => childrens;
+        public bool IsChildrens => childrens.Any();
     }
 }
