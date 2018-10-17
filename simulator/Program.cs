@@ -12,7 +12,7 @@ namespace Simulator
         static void Main(string[] args)
         {
 
-            var sim = Simulator<EtherRod>.Setup<EtherRod>(4);
+            var sim = Simulator<EtherRod>.Setup<EtherRod>(2);
 
             sim.WarmUpZone();
 

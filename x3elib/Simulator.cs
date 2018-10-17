@@ -57,6 +57,7 @@
 
                 foreach (var activeZone in _collection)
                     activeZone.Extract(false, false);
+
             }, SimulationTokenSource.Token);
             task.Start();
         }
@@ -66,12 +67,12 @@
             SimulationTokenSource.Cancel();
             while (_collection.All(x => x.Status != ActiveZoneStatus.Extracted))  { Thread.Sleep(200); }
 
-            var b = _collection.Sum(x => x.Rod.ExtractedPower);
+            var b = _collection.Sum(x => x.GetComponent<EtherRod>().ExtractedPower);
             var genpower = new Power(b, Power.GigaWatt);
-            var rod1 = _collection.MaxBy(x => x.Rod.MaxTemperature).First();
-            var rod2 = _collection.MinBy(x => x.Rod.MinTemperature).First();
-            var maxtmp = new Temperature(rod1.Rod.MaxTemperature, Temperature.Celsius);
-            var mintmp = new Temperature(rod2.Rod.MinTemperature, Temperature.Celsius);
+            var rod1 = _collection.MaxBy(x => x.GetComponent<EtherRod>().MaxTemperature).First();
+            var rod2 = _collection.MinBy(x => x.GetComponent<EtherRod>().MinTemperature).First();
+            var maxtmp = new Temperature(rod1.GetComponent<EtherRod>().MaxTemperature, Temperature.Celsius);
+            var mintmp = new Temperature(rod2.GetComponent<EtherRod>().MinTemperature, Temperature.Celsius);
             Screen.WriteLine($"[{"W".To(Color.Fuchsia)}] Generated power: {$"{genpower[Power.GigaWatt].ToString("##.##")}".To(Color.DeepSkyBlue)}");
             Screen.WriteLine($"[{"W".To(Color.Fuchsia)}] Maximal Temperature: {$"{maxtmp[Temperature.Celsius].ToString("##.##")}".To(Color.Orange)} in [ZoneID: {rod1.UID.To(Color.Yellow)}]");
             Screen.WriteLine($"[{"W".To(Color.Fuchsia)}] Minimal Temperature: {$"{mintmp[Temperature.Celsius].ToString("##.##")}".To(Color.CornflowerBlue)} in [ZoneID: {rod2.UID.To(Color.Yellow)}]");

@@ -2,6 +2,7 @@
 namespace x3e
 {
     using System;
+    using Troschuetz.Random.Generators;
 
     public static class Extension
     {
@@ -24,6 +25,8 @@ namespace x3e
         }
 
         public static float Fixed(this float value, int round) => (float) Math.Round(value, round);
+        public static float At(this float a, float b) => (float)new NR3Generator().NextDouble(Math.Abs(a), Math.Abs(b));
+        public static float Normalize(this float a, float b) => (a - b).At(a + b);
         public static W Value<W>(this IReactiveResult result) => (W)Convert.ChangeType((result as ReactiveResult)._value, typeof(W));
     }
 }
