@@ -23,7 +23,7 @@
             ActiveRod.Load = CalculateLoad(ActiveRod.Volume.Normalize(2f));
             var deg = DegradationVolume(ActiveRod.Volume, ActiveRod.Power, out var generated);
             Screen.WriteLine($"[{"G".To(Color.Purple)}] Generated {$"{generated}e/s".To(Color.GreenYellow)}, degradation volume: {deg} in [ZoneID: {Zone.UID.To(Color.Gold)}] {ActiveRod.Temperature}°C");
-            ActiveRod.Volume -= deg.Normalize(deg.Percent(45));
+            ActiveRod.Volume -= deg.Normalize(deg.Percent(75)) * 3;
             ActiveRod.Temperature += 
                 ActiveRod.Temperature.
                     Less(0).Then(125f.At(143f).Fixed(0)).

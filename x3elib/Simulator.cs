@@ -19,8 +19,8 @@
 
         public static Simulator<TRod> Setup<TRod>(int activeZone) where TRod : EmptyRod, new()
         {
-            if(activeZone % 2 != 0)
-                throw new Exception("Error: ActiveZones grid is not symmetric.");
+            //if(activeZone % 2 != 0)
+            //    throw new Exception("Error: ActiveZones grid is not symmetric.");
 
             var listActiveZones = new List<ActiveZone<TRod>>();
 
@@ -40,7 +40,7 @@
             {
                 foreach (var o in SimulationStorage.StorageObjects)
                     o.Value.Update();
-                Thread.Sleep(20);
+                Thread.Sleep(100);
             }
             foreach (var o in SimulationStorage.StorageObjects)
                 o.Value.Clear();

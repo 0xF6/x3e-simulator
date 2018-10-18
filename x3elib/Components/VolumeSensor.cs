@@ -5,9 +5,8 @@
         public override void Signal()
         {
             var protectionZone = GetComponent<ProtectionZone<Rod>>();
-            ActiveRod.ReadTemperature();
 
-            if (ActiveRod.Volume <= 20)
+            if (ActiveRod.Volume <= 20 && !protectionZone.GetComponent<ActiveZone<Rod>>().Status.HasFlag(ActiveZoneStatus.Warm))
                 protectionZone.Extract(false, ActiveZoneStatus.LowerMass);
             if (ActiveRod.Volume >= 440_000)
                 protectionZone.Extract(true, ActiveZoneStatus.CriticalMassOverloop);

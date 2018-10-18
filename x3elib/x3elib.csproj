@@ -8,6 +8,8 @@
   <ItemGroup>
     <PackageReference Include="csunits" Version="2.0.1.50806" />
     <PackageReference Include="morelinq" Version="3.0.0" />
+    <PackageReference Include="Nancy" Version="1.4.5" />
+    <PackageReference Include="Nancy.Hosting.Self" Version="1.4.1" />
     <PackageReference Include="NETStandard.Library" Version="2.0.3" />
     <PackageReference Include="RC.Core" Version="2018.1.0" />
     <PackageReference Include="Troschuetz.Random" Version="4.3.0" />

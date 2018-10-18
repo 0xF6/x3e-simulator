@@ -29,7 +29,7 @@
             Screen.WriteLine($"[{"R".To(Color.Red)}] Cooling rod in [ZoneID: {Zone.UID.To(Color.Gold)}] V:{ActiveRod.Volume} {ActiveRod.Temperature}°C");
             ActiveRod.Volume = CalculateVolume(WarmStart.Value, ActiveRod.Power);
             ActiveRod.Temperature -= ActiveRod.Temperature.
-                Percent(1f).
+                Percent(15f).
                 If(0).Then(12.5f).Value<float>().
                 Less(200f).Then(25.4f).Value<float>();
         }
