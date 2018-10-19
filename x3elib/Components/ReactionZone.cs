@@ -20,7 +20,7 @@
         public override void Update()
         {
             if(!Zone.Status.HasFlag(ActiveZoneStatus.Work)) return;
-            ActiveRod.Load = CalculateLoad(ActiveRod.Volume.Normalize(2f));
+            ActiveRod.Load = CalculateLoad(ActiveRod.Volume);
             var deg = DegradationVolume(ActiveRod.Volume, ActiveRod.Power, out var generated);
             Screen.WriteLine($"[{"G".To(Color.Purple)}] Generated {$"{generated}e/s".To(Color.GreenYellow)}, degradation volume: {deg} in [ZoneID: {Zone.UID.To(Color.Gold)}] {ActiveRod.Temperature}°C");
             ActiveRod.Volume -= deg.Normalize(deg.Percent(75)) * 3;
@@ -35,11 +35,11 @@
 
 
         /// <summary>
-        /// x^2 arctan(x^3) cos(x^4^2)
+        /// |x arctan(x) cos(x)|
         /// </summary>
         private float CalculateLoad(double power) =>
-           (float)(Math.Pow(power, 2) * Math.Atan(Math.Pow(power, 3)) *
-            Math.Cos(Math.Pow(Math.Pow(power, 4), 2)));
+           (float)Math.Abs(power * Math.Atan(power) *
+            Math.Cos(power));
         /// <summary>
         /// (x/power)^2 arctan(x) - energy
         /// log(x) - degradation

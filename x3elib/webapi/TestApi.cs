@@ -18,7 +18,7 @@
         {
             Get["/"] = _ => File.ReadAllText(@".\index.html");
             Get["/temperature"] = _ => ((int)SimulationStorage.GetEtherRod().Temperature).ToString();
-            Get["/load"] = _ => ((int)SimulationStorage.GetEtherRod().Load).ToString();
+            Get["/load"] = _ => ((int) Math.Round(SimulationStorage.GetEtherRod().Load, 2)).ToString();
             Get["/volume"] = _ => ((int)SimulationStorage.GetEtherRod().Volume).ToString();
         }
         public static void Run(Simulator<EtherRod> sim)

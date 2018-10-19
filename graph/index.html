@@ -100,11 +100,13 @@ Highcharts.Point.prototype.highlight = function (event) {
 Highcharts.chart('container1', {
   chart: {
     zoomType: 'x',
-    type: 'spline',
+      type: 'area',
+    panning: true,
+        panKey: 'shift',
     scrollablePlotArea: {
             minWidth: 700
     },
-    //animation: Highcharts.svg, // don't animate in old IE
+    animation: Highcharts.svg, // don't animate in old IE
     //marginRight: 10,
     events: {
       load: function () {
@@ -117,11 +119,18 @@ Highcharts.chart('container1', {
                 y = parseInt(data);
                 series.addPoint([x, y], true, true);
             });
-        }, 200);
+        }, 1000);
       }
     }
   },
-
+ boost: {
+    enabled: true,
+    useGPUTranslations: true,
+    seriesThreshold: 1,
+    debug: {
+        timeSetup: true,
+     }
+  },
   time: {
     useUTC: false
   },
@@ -131,9 +140,13 @@ Highcharts.chart('container1', {
   },
   xAxis: {
     type: 'datetime',
-    tickPixelInterval: 150
+    tickPixelInterval: 150,
+    crosshair: false
   },
-  yAxis: {
+    yAxis: {
+         startOnTick: true,
+        endOnTick: false,
+        opposite: false,
     title: {
       text: '\u00B0' + 'C'
     },
@@ -153,7 +166,11 @@ Highcharts.chart('container1', {
   exporting: {
     enabled: false
   },
-  series: [{
+    series: [{
+          marker: {
+            enabled: false
+        },
+        threshold: null,
     name: '\u00B0' + 'C',
     data: (function () {
       // generate an array of random data
@@ -161,39 +178,64 @@ Highcharts.chart('container1', {
         time = (new Date()).getTime(),
         i;
 
-      for (i = -19; i <= 0; i += 1) {
+      for (i = -69; i <= 0; i += 1) {
         data.push({
           x: time + i * 1000,
-          y: Math.random()
+          y: 0
         });
       }
       return data;
-    }()),
-    type: 'area'
+    }())
   }],
   credits: {
         enabled: false
-    }
+    },
+   plotOptions: {
+                line: {
+                    animation: false,
+                    marker: {
+                        enabled: true,
+                    },
+                },
+                series: {
+                    stickyTracking: false,
+                    dataGrouping: {
+                        enabled: false,
+                    },
+                    showInNavigator: false,
+                    turboThreshold: 0,
+                },
+            } 
 });
 
 
 Highcharts.chart('container2', {
   chart: {
     type: 'spline',
-    //animation: Highcharts.svg, // don't animate in old IE
+    animation: Highcharts.svg, // don't animate in old IE
     marginRight: 10,
     events: {
       load: function () {
         
-        var series = this.series[0];
+        var series1 = this.series[0];
         setInterval(function () {
             $.getJSON("http://localhost/volume", (data) => {
                 console.log(data);
                 var x = (new Date()).getTime(), // current time
                 y = parseInt(data);
-                series.addPoint([x, y], true, true);
+                series1.addPoint([x, y], true, true);
             });
-        }, 200);
+          }, 1000);
+
+          var series2 = this.series[1];
+        setInterval(function () {
+            $.getJSON("http://localhost/load", (data) => {
+                console.log(data);
+                var x = (new Date()).getTime(), // current time
+                y = parseInt(data);
+                series2.addPoint([x, y], true, true);
+            });
+        }, 1000);
       }
     }
   },
@@ -207,11 +249,11 @@ Highcharts.chart('container2', {
   },
   xAxis: {
     type: 'datetime',
-    tickPixelInterval: 150
+    tickPixelInterval: 250
   },
   yAxis: {
     title: {
-      text: 'Volume'
+      text: 'Unit'
     },
     plotLines: [{
       value: 0,
@@ -228,24 +270,46 @@ Highcharts.chart('container2', {
   },
   exporting: {
     enabled: false
-  },
+    },
+  plotOptions: {
+        series: {
+            //animation: false
+        }
+    },
   series: [{
-    name: 'Volume',
+      name: 'Volume',
+      shadow: true,
     data: (function () {
-      // generate an array of random data
       var data = [],
         time = (new Date()).getTime(),
         i;
 
-      for (i = -19; i <= 0; i += 1) {
+      for (i = -69; i <= 0; i += 1) {
         data.push({
           x: time + i * 1000,
-          y: Math.random()
+          y: 0
         });
       }
       return data;
-    }()),
-    type: 'area'
+    }())
+    },
+      {
+          name: 'Load',
+          shadow: true,
+          dashStyle: 'dash',
+    data: (function () {
+      var data = [],
+        time = (new Date()).getTime(),
+        i;
+
+      for (i = -69; i <= 0; i += 1) {
+        data.push({
+          x: time + i * 1000,
+          y: 0
+        });
+      }
+      return data;
+    }())
   }],
   credits: {
         enabled: false
