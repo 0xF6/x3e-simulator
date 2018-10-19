@@ -16,8 +16,10 @@
         public static Simulator<EtherRod> Simulator;
         public TestModule()
         {
-            Get["/"] = _ => File.ReadAllText(@"C:\Git\x3e-simulator\graph\index.html");
+            Get["/"] = _ => File.ReadAllText(@".\index.html");
             Get["/temperature"] = _ => ((int)SimulationStorage.GetEtherRod().Temperature).ToString();
+            Get["/load"] = _ => ((int)SimulationStorage.GetEtherRod().Load).ToString();
+            Get["/volume"] = _ => ((int)SimulationStorage.GetEtherRod().Volume).ToString();
         }
         public static void Run(Simulator<EtherRod> sim)
         {

@@ -1,50 +1,255 @@
-<!DOCTYPE HTML>
-<html>
-<head>
+<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="https://code.highcharts.com/modules/exporting.js"></script>
+<script src="https://code.highcharts.com/modules/export-data.js"></script>
+
+<div id="container1" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+<div id="container2" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+
+
 <script>
-window.onload = function() {
+    /**
+ * In order to synchronize tooltips and crosshairs, override the
+ * built-in events with handlers defined on the parent element.
+ */
+['mousemove', 'touchmove', 'touchstart'].forEach(function (eventType) {
+    document.getElementById('container1').addEventListener(
+        eventType,
+        function (e) {
+            var chart,
+                point,
+                i,
+                event;
 
-var dataPoints = [];
+            for (i = 0; i < Highcharts.charts.length; i = i + 1) {
+                chart = Highcharts.charts[i];
+                // Find coordinates within the chart
+                event = chart.pointer.normalize(e);
+                // Get the hovered point
+                point = chart.series[0].searchPoint(event, true);
 
-var chart = new CanvasJS.Chart("chartContainer", {
-    zoomEnabled: true,
-    animationEnabled: true,
-	theme: "dark2",
-	title: {
-		text: "Temperature e3x Rod"
-	},
-	data: [{
-		type: "line",
-		dataPoints: dataPoints
-	}]
+                if (point) {
+                    point.highlight(e);
+                }
+            }
+        }
+    );
+    document.getElementById('container2').addEventListener(
+        eventType,
+        function (e) {
+            var chart,
+                point,
+                i,
+                event;
+
+            for (i = 0; i < Highcharts.charts.length; i = i + 1) {
+                chart = Highcharts.charts[i];
+                // Find coordinates within the chart
+                event = chart.pointer.normalize(e);
+                // Get the hovered point
+                point = chart.series[0].searchPoint(event, true);
+
+                if (point) {
+                    point.highlight(e);
+                }
+            }
+        }
+    );
 });
-updateData();
+/**
+ * Override the reset function, we don't need to hide the tooltips and
+ * crosshairs.
+ */
+ Highcharts.Pointer.prototype.reset = function () {
+    return undefined;
+};
 
-// Initial Values
-var xValue = 0;
-var yValue = 10;
-var newDataCount = 6;
+/**
+ * Highlight a point by showing tooltip, setting hover state and draw crosshair
+ */
+Highcharts.Point.prototype.highlight = function (event) {
+    event = this.series.chart.pointer.normalize(event);
+    this.onMouseOver(); // Show the hover marker
+    this.series.chart.tooltip.refresh(this); // Show the tooltip
+    this.series.chart.xAxis[0].drawCrosshair(event, this); // Show the crosshair
+};
+/**
+ * Synchronize zooming through the setExtremes event handler.
+ */
+ function syncExtremes(e) {
+    var thisChart = this.chart;
 
-function addData(data) {
-    console.log(data);
-	dataPoints.push({x: xValue, y: parseInt(data)});
-    xValue++;
-	
-	newDataCount = 1;
-	chart.render();
-	setTimeout(updateData, 150);
+    if (e.trigger !== 'syncExtremes') { // Prevent feedback loop
+        Highcharts.each(Highcharts.charts, function (chart) {
+            if (chart !== thisChart) {
+                if (chart.xAxis[0].setExtremes) { // It is null while updating
+                    chart.xAxis[0].setExtremes(
+                        e.min,
+                        e.max,
+                        undefined,
+                        false,
+                        { trigger: 'syncExtremes' }
+                    );
+                }
+            }
+        });
+    }
 }
 
-function updateData() {
-	$.getJSON("http://localhost/temperature", addData);
-}
+    
+Highcharts.chart('container1', {
+  chart: {
+    zoomType: 'x',
+    type: 'spline',
+    scrollablePlotArea: {
+            minWidth: 700
+    },
+    //animation: Highcharts.svg, // don't animate in old IE
+    //marginRight: 10,
+    events: {
+      load: function () {
+        
+        var series = this.series[0];
+        setInterval(function () {
+            $.getJSON("http://localhost/temperature", (data) => {
+                console.log(data);
+                var x = (new Date()).getTime(), // current time
+                y = parseInt(data);
+                series.addPoint([x, y], true, true);
+            });
+        }, 200);
+      }
+    }
+  },
 
-}
+  time: {
+    useUTC: false
+  },
+
+  title: {
+    text: 'Temperature e3x Rod'
+  },
+  xAxis: {
+    type: 'datetime',
+    tickPixelInterval: 150
+  },
+  yAxis: {
+    title: {
+      text: '\u00B0' + 'C'
+    },
+    plotLines: [{
+      value: 0,
+      width: 1,
+      color: '#808080'
+    }]
+  },
+  tooltip: {
+    headerFormat: '<b>{point.y:.2f}{series.name}</b><br/>',
+    pointFormat: '{point.x:%Y-%m-%d %H:%M:%S}'
+  },
+  legend: {
+    enabled: true
+  },
+  exporting: {
+    enabled: false
+  },
+  series: [{
+    name: '\u00B0' + 'C',
+    data: (function () {
+      // generate an array of random data
+      var data = [],
+        time = (new Date()).getTime(),
+        i;
+
+      for (i = -19; i <= 0; i += 1) {
+        data.push({
+          x: time + i * 1000,
+          y: Math.random()
+        });
+      }
+      return data;
+    }()),
+    type: 'area'
+  }],
+  credits: {
+        enabled: false
+    }
+});
+
+
+Highcharts.chart('container2', {
+  chart: {
+    type: 'spline',
+    //animation: Highcharts.svg, // don't animate in old IE
+    marginRight: 10,
+    events: {
+      load: function () {
+        
+        var series = this.series[0];
+        setInterval(function () {
+            $.getJSON("http://localhost/volume", (data) => {
+                console.log(data);
+                var x = (new Date()).getTime(), // current time
+                y = parseInt(data);
+                series.addPoint([x, y], true, true);
+            });
+        }, 200);
+      }
+    }
+  },
+
+  time: {
+    useUTC: false
+  },
+
+  title: {
+    text: 'Volume e3x Rod'
+  },
+  xAxis: {
+    type: 'datetime',
+    tickPixelInterval: 150
+  },
+  yAxis: {
+    title: {
+      text: 'Volume'
+    },
+    plotLines: [{
+      value: 0,
+      width: 1,
+      color: '#808080'
+    }]
+  },
+  tooltip: {
+    headerFormat: '<b>{point.y:.2f}{series.name}</b><br/>',
+    pointFormat: '{point.x:%Y-%m-%d %H:%M:%S}'
+  },
+  legend: {
+    enabled: true
+  },
+  exporting: {
+    enabled: false
+  },
+  series: [{
+    name: 'Volume',
+    data: (function () {
+      // generate an array of random data
+      var data = [],
+        time = (new Date()).getTime(),
+        i;
+
+      for (i = -19; i <= 0; i += 1) {
+        data.push({
+          x: time + i * 1000,
+          y: Math.random()
+        });
+      }
+      return data;
+    }()),
+    type: 'area'
+  }],
+  credits: {
+        enabled: false
+    }
+});
+
 </script>
-</head>
-<body>
-<div id="chartContainer" style="height: 370px; width: 100%;"></div>
-<script src="https://canvasjs.com/assets/script/jquery-1.11.1.min.js"></script>
-<script src="https://canvasjs.com/assets/script/jquery.canvasjs.min.js"></script>
-</body>
-</html>

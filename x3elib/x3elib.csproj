@@ -6,6 +6,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Include="..\graph\index.html" Link="index.html">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="csunits" Version="2.0.1.50806" />
     <PackageReference Include="morelinq" Version="3.0.0" />
     <PackageReference Include="Nancy" Version="1.4.5" />
