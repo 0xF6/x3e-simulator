@@ -18,7 +18,8 @@
         public override void Update()
         {
             if(Zone.Status != ActiveZoneStatus.Warm) return;
-            if(WarmStart == null) WarmStart = DateTime.UtcNow;
+            if(Zone.Status == ActiveZoneStatus.Extracted) return;
+            if (WarmStart == null) WarmStart = DateTime.UtcNow;
             
             if (ActiveRod.Volume >= ActiveRod.MaxVolume.Percent(95))
             {

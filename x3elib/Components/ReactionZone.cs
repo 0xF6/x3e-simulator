@@ -19,6 +19,7 @@
 
         public override void Update()
         {
+            if(Zone.Status == ActiveZoneStatus.Extracted) return;
             if(!Zone.Status.HasFlag(ActiveZoneStatus.Work)) return;
             ActiveRod.Load = CalculateLoad(ActiveRod.Volume);
             var deg = DegradationVolume(ActiveRod.Volume, ActiveRod.Power, out var generated);

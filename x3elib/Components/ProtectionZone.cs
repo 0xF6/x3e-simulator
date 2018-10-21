@@ -10,10 +10,11 @@
         }
         public override void Update()
         {
+
             var status = GetComponent<ActiveZone<Rod>>().Status;
             
-            if(status.HasFlag(ActiveZoneStatus.EmergencyStop))
-                return;
+            if(status.HasFlag(ActiveZoneStatus.EmergencyStop)) return;
+            if(status.HasFlag(ActiveZoneStatus.Extracted)) return;
             GetComponent<TemperatureSensor<Rod>>().Signal();
             GetComponent<VolumeSensor<Rod>>().Signal();
         }
