@@ -26,6 +26,7 @@
         public void SetStatus(ActiveZoneStatus stat) => Status = stat;
         public void Extract(bool emergency = false, bool auto = true, ActiveZoneStatus? status = null)
         {
+            
             if (emergency)
             {
                 Screen.WriteLine($"[{"FAULT".To(Color.Red)}] EMERGENCY EXTRACTED ROD [ZoneID: {UID.To(Color.Gold)}]");
