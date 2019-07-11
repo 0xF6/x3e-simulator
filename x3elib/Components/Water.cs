@@ -9,7 +9,6 @@
         public Temperature Temp { get; } = new Temperature(0f, Temperature.Celsius);
         public override void Start()
         {
-            Temp[Temperature.Celsius] = 21.2f;
         }
     }
 }
