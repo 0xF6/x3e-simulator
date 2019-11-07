@@ -6,12 +6,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Include="..\graph\index.html" Link="index.html">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="Ivy.Measures" Version="3.5.2-rc" />
     <PackageReference Include="morelinq" Version="3.2.0" />
     <PackageReference Include="NETStandard.Library" Version="2.0.3" />
