@@ -26,8 +26,9 @@
             IsHibernate = true;
         }
 
-        public void Start()
+        public new void Start()
         {
+            base.Start();
             if(!IsHibernate)
                 return;
             IsHibernate = false;
