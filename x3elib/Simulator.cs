@@ -1,15 +1,9 @@
 ﻿namespace x3e
 {
-    using System;
     using System.Collections.Generic;
-    using System.Drawing;
-    using System.Linq;
     using System.Threading;
     using System.Threading.Tasks;
     using components;
-    using Cureos.Measures.Quantities;
-    using MoreLinq;
-    using RC.Framework.Screens;
     using simulation;
 
     public class Simulator<SRod> where SRod : EmptyRod, new()
@@ -32,19 +26,18 @@
 
         private Simulator(IEnumerable<ActiveZone<SRod>> collection) => _collection = collection;
 
-        public void Simulate()
+        public async Task Simulate(CancellationToken cancellationToken)
         {
             foreach (var o in SimulationStorage.StorageObjects)
                 o.Value.Start();
-            while (!IsStop)
+            while (!cancellationToken.IsCancellationRequested)
             {
                 foreach (var o in SimulationStorage.StorageObjects)
                     o.Value.Update();
-                Thread.Sleep(100);
+                await Task.Delay(100, cancellationToken);
             }
             foreach (var o in SimulationStorage.StorageObjects)
                 o.Value.Clear();
         }
-        public bool IsStop { get; set; }
     }
 }
