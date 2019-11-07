@@ -24,7 +24,7 @@
         {
             var result = childrens.ContainsKey(typeOfComponent) ?
             childrens[typeOfComponent] : null;
-
+            
             if (result == null && Parent?.GetType() == typeOfComponent)
                 result = Parent;
             return result;
