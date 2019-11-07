@@ -3,7 +3,6 @@
     using System;
     using System.Drawing;
     using etc;
-    using RC.Framework.Screens;
     using simulation;
     public class RefrigerationZone<Rod> : SimulatorObject where Rod : EmptyRod, new()
     {
@@ -27,7 +26,7 @@
                 WarmStart = null;
                 return;
             }
-            Screen.WriteLine($"[{"R".To(Color.Red)}] Cooling rod in [ZoneID: {Zone.UID.To(Color.Gold)}] V:{ActiveRod.Volume} {ActiveRod.Temperature}°C");
+            Console.WriteLine($"[{"R".To(Color.Red)}] Cooling rod in [ZoneID: {Zone.UID.To(Color.Gold)}] V:{ActiveRod.Volume} {ActiveRod.Temperature}°C");
             ActiveRod.Volume = CalculateVolume(WarmStart.Value, ActiveRod.Power);
             ActiveRod.Temperature -= ActiveRod.Temperature.
                 Percent(15f).

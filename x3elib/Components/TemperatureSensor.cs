@@ -1,12 +1,15 @@
 ﻿namespace x3e.components
 {
+    using System.IO;
+    using System.Linq;
+    using Newtonsoft.Json;
+
     public class TemperatureSensor<Rod> : Sensor<Rod> where Rod : EmptyRod, new()
     {
         public override void Signal()
         {
             var protectionZone = GetComponent<ProtectionZone<Rod>>();
             ActiveRod.ReadTemperature();
-
             if(ActiveRod.Temperature >= 2100)
                 protectionZone.Extract(true, ActiveZoneStatus.Overheat);
             if (ActiveRod.Temperature <= -4700)

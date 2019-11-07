@@ -3,7 +3,6 @@
     using System;
     using System.Drawing;
     using etc;
-    using RC.Framework.Screens;
     
     public class ActiveZone<TRod> : Zone where TRod : EmptyRod, new()
     {
@@ -20,7 +19,7 @@
         {
             if (Status != ActiveZoneStatus.Unknown)
                 throw new Exception("Invalid status zone.");
-            Screen.WriteLine($"[{"WarmUp".To(Color.Red)}] Zone ID: {UID.To(Color.Gold)}");
+            Console.WriteLine($"[{"WarmUp".To(Color.Red)}] Zone ID: {UID.To(Color.Gold)}");
             Status = ActiveZoneStatus.Warm;
         }
         public void SetStatus(ActiveZoneStatus stat) => Status = stat;
@@ -29,7 +28,7 @@
             
             if (emergency)
             {
-                Screen.WriteLine($"[{"FAULT".To(Color.Red)}] EMERGENCY EXTRACTED ROD [ZoneID: {UID.To(Color.Gold)}]");
+                Console.WriteLine($"[{"FAULT".To(Color.Red)}] EMERGENCY EXTRACTED ROD [ZoneID: {UID.To(Color.Gold)}]");
                 ActiveRod.Volume -= ActiveRod.Volume.Percent(46.3f);
                 Status = ActiveZoneStatus.EmergencyStop;
                 if(status != null) Status |= status.Value;
@@ -39,9 +38,9 @@
 
             if (auto)
             {
-               Screen.WriteLine($"[{"E".To(Color.Yellow)}] Extracted rod in [ZoneID: {UID.To(Color.Gold)}] due to {status}, last active volume: {ActiveRod.Volume}");
-               Screen.WriteLine($"[{"E".To(Color.Yellow)}] Total generated energy in current rod: {ActiveRod.ExtractedPower} e/s in [ZoneID: {UID.To(Color.Gold)}]");
-               Screen.WriteLine($"[{"E".To(Color.Yellow)}] Max {ActiveRod.MaxTemperature}°C Min {ActiveRod.MinTemperature}°C");
+               Console.WriteLine($"[{"E".To(Color.Yellow)}] Extracted rod in [ZoneID: {UID.To(Color.Gold)}] due to {status}, last active volume: {ActiveRod.Volume}");
+               Console.WriteLine($"[{"E".To(Color.Yellow)}] Total generated energy in current rod: {ActiveRod.ExtractedPower} e/s in [ZoneID: {UID.To(Color.Gold)}]");
+               Console.WriteLine($"[{"E".To(Color.Yellow)}] Max {ActiveRod.MaxTemperature}°C Min {ActiveRod.MinTemperature}°C");
             }
             Status = ActiveZoneStatus.Extracted;
         }

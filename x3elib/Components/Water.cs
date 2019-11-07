@@ -1,6 +1,6 @@
 ﻿namespace x3e.components
 {
-    using Cureos.Measures.Quantities;
+    using Ivy.Measures.Quantities;
     using simulation;
     public class Water : SimulatorObject
     {
