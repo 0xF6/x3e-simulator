@@ -9,7 +9,7 @@
     <PackageReference Include="Ivy.Measures" Version="3.5.2-rc" />
     <PackageReference Include="morelinq" Version="3.2.0" />
     <PackageReference Include="NETStandard.Library" Version="2.0.3" />
-    <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.2" />
     <PackageReference Include="Pastel" Version="1.3.1" />
     <PackageReference Include="Troschuetz.Random" Version="4.3.1" />
   </ItemGroup>
